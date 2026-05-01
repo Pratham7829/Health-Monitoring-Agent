@@ -1,0 +1,161 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: #eef2f7;
+    margin: 0;
+    padding: 0;
+}
+
+/* Heading */
+h1 {
+    text-align: center;
+    margin-top: 20px;
+    color: #333;
+}
+
+h4 {
+    margin-bottom: 8px;
+    color: #444;
+    font-weight: 600;
+}
+
+/* 🔥 MAIN LAYOUT (LEFT + RIGHT) */
+.main {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* LEFT PANEL (FORM) */
+.left-panel {
+    width: 30%;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    text-align: left;
+}
+
+/* RIGHT PANEL (RESULT) */
+.right-panel {
+    width: 70%;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    text-align: left;
+}
+
+/* Inputs */
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 10px;
+    border: 1px solid #dcdcdc;
+    font-size: 14px;
+    box-sizing: border-box;   /* 🔥 FIX */
+    transition: 0.25s;
+}
+
+input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Button */
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 12px;
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.02);
+}
+
+/* Loading */
+#loading {
+    display: none;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+}
+
+/* 🔥 RESULT GRID */
+#result {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+/* CARDS */
+.card {
+    background: linear-gradient(145deg, #ffffff, #f0f3f7);
+    padding: 18px;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+}
+
+/* FULL WIDTH CARD (for reasoning) */
+.full-width {
+    grid-column: span 2;
+}
+
+/* Risk Badge */
+.risk-badge {
+    padding: 6px 14px;
+    border-radius: 20px;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.low { background: #2ecc71; }
+.medium { background: #f39c12; }
+.high { background: #e74c3c; }
+
+/* Reasoning */
+ul {
+    padding-left: 20px;
+}
+
+/* Toggle clickable */
+.clickable {
+    cursor: pointer;
+    color: #007bff;
+}
+
+/* Floating Prompt */
+.popup {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 320px;
+    max-height: 250px;
+    overflow-y: auto;
+    background: white;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    display: none;
+}

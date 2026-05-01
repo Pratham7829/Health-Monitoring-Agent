@@ -1,0 +1,102 @@
+[
+  {
+    "patientId": "p1",
+    "records": [
+      {
+        "bp": 210,
+        "sugar": 90,
+        "heartRate": 95
+      },
+      {
+        "bp": 219,
+        "sugar": 95,
+        "heartRate": 110
+      },
+      {
+        "bp": 190,
+        "sugar": 200,
+        "heartRate": 156
+      }
+    ]
+  },
+  {
+    "patientId": "P2",
+    "records": [
+      {
+        "bp": 150,
+        "sugar": 160,
+        "heartRate": 105
+      },
+      {
+        "bp": 140,
+        "sugar": 200,
+        "heartRate": 100
+      },
+      {
+        "bp": 160,
+        "sugar": 130,
+        "heartRate": 110
+      },
+      {
+        "bp": 190,
+        "sugar": 205,
+        "heartRate": 146
+      },
+      {
+        "bp": 210,
+        "sugar": 167,
+        "heartRate": 95
+      }
+    ]
+  },
+  {
+    "patientId": "P3",
+    "records": [
+      {
+        "bp": 130,
+        "sugar": 110,
+        "heartRate": 80
+      }
+    ]
+  },
+  {
+    "patientId": "P1",
+    "records": [
+      {
+        "bp": 150,
+        "sugar": 200,
+        "heartRate": 90
+      },
+      {
+        "bp": 200,
+        "sugar": 190,
+        "heartRate": 90
+      },
+      {
+        "bp": 200,
+        "sugar": 250,
+        "heartRate": 100
+      }
+    ]
+  },
+  {
+    "patientId": "",
+    "records": [
+      {
+        "bp": 0,
+        "sugar": 0,
+        "heartRate": 0
+      }
+    ]
+  },
+  {
+    "patientId": "p3",
+    "records": [
+      {
+        "bp": 200,
+        "sugar": 300,
+        "heartRate": 90
+      }
+    ]
+  }
+]

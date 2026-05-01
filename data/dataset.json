@@ -1,0 +1,7 @@
+[
+  { "bp": 120, "sugar": 90, "heartRate": 75, "risk": "low" },
+  { "bp": 130, "sugar": 110, "heartRate": 80, "risk": "low" },
+  { "bp": 140, "sugar": 150, "heartRate": 90, "risk": "medium" },
+  { "bp": 150, "sugar": 180, "heartRate": 100, "risk": "high" },
+  { "bp": 160, "sugar": 200, "heartRate": 110, "risk": "high" }
+]

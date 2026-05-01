@@ -43,9 +43,7 @@ Each patient has: Unique ID, Separate history, Independent trend tracking
                  ↓
             Agent Controller
                  ↓
- ┌───────────────┬───────────────┬───────────────┐
- │ Trend Analyzer│ Dataset Tool  │ Rule Engine   │
- └───────────────┴───────────────┴───────────────┘
+ Trend Analyzer │ Dataset Tool │ Rule Engine 
                  ↓
         Risk + Confidence + Factors
                  ↓

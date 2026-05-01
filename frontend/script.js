@@ -46,9 +46,29 @@ async function submitForm() {
                 <p><strong>Initial:</strong> ${data.initialRisk}</p>
             </div>
 
+             <!-- 🧠 CONFIDENCE -->
+            <div class="card">
+                <h4>Confidence</h4>
+                <p style="
+                    font-size:18px;
+                    font-weight:600;
+                    color:${data.confidence > 75 ? "#2ecc71" : data.confidence > 50 ? "#f39c12" : "#e74c3c"};
+                ">
+                    ${data.confidence}%
+                </p>
+            </div>
+
             <div class="card">
                 <h4>📈 Trend</h4>
                 <p>${data.trend}</p>
+            </div>
+
+            <!-- 🧠 DECISION FACTORS -->
+            <div class="card">
+                <h4>Decision Factors</h4>
+                <ul>
+                    ${data.factors.map(f => `<li>✔ ${f}</li>`).join("")}
+                </ul>
             </div>
 
             <div class="card">

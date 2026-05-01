@@ -76,6 +76,16 @@
         "bp": 200,
         "sugar": 250,
         "heartRate": 100
+      },
+      {
+        "bp": 190,
+        "sugar": 165,
+        "heartRate": 120
+      },
+      {
+        "bp": 300,
+        "sugar": 200,
+        "heartRate": 150
       }
     ]
   },

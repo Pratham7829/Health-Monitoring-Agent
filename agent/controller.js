@@ -98,6 +98,17 @@ function agentController(data) {
     // final risk starts from initial
     let risk = initialRisk;
 
+        let factors = [];
+
+    if (data.bp > 140) factors.push("High Blood Pressure");
+    if (data.sugar > 180) factors.push("High Sugar Level");
+    if (trend === "increasing") factors.push("Increasing Health Risk Trend");
+    if (datasetResult.high > 0.6) factors.push("Matches High-Risk Patient Patterns");
+
+    if (factors.length === 0) {
+        factors.push("All vitals within safe range");
+    }
+
     // Step 6: Adjust using dataset
 
     // convert to numbers (fix issue)
@@ -119,6 +130,23 @@ function agentController(data) {
 
     reasoning.push(`Final Risk (after dataset analysis): ${risk}`);
 
+    let confidence = 0;
+
+    // 1) dataset signal (strongest)
+    if (risk === "high") confidence += datasetResult.high * 60;
+    else if (risk === "medium") confidence += datasetResult.medium * 60;
+    else confidence += datasetResult.low * 60;
+
+    // 2) trend signal
+    if (trend === "increasing") confidence += 15;
+    if (trend === "stable") confidence += 8;
+
+    // 3) history signal (more data → more confidence)
+    confidence += Math.min(historyData.length * 5, 25);
+
+    // clamp 0–100
+    confidence = Math.min(100, Math.round(confidence));
+
     // Step 7: Recommendation
     const recommendation = recommender(risk);
     reasoning.push(`Decision: ${recommendation}`);
@@ -130,7 +158,9 @@ function agentController(data) {
         recommendation,
         reasoning,
         datasetResult,
-        patientHistory: patient.records   // 🔥 ADD THIS
+        patientHistory: patient.records,   // 🔥 ADD THIS
+        confidence,
+        factors
     };
 }
 

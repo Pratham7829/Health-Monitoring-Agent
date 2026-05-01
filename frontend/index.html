@@ -15,18 +15,25 @@
 
             <h2>Enter Patient Data</h2>
 
+            <p style="font-size:13px; color:#777;">
+                Enter patient vitals to analyze health risk
+            </p>
+
             <input type="text" id="patientId" placeholder="Patient ID (e.g. p1)">
             <input type="number" id="bp" placeholder="Blood Pressure">
             <input type="number" id="sugar" placeholder="Sugar Level">
             <input type="number" id="heartRate" placeholder="Heart Rate">
 
-            <button onclick="submitForm()">Analyze</button>
+            <!-- 🔥 Analyze Button (with ID fix) -->
+            <button id="analyzeBtn" onclick="submitForm()">Analyze</button>
 
-            <!-- Loading -->
-            <div id="loading">⏳ Analyzing...</div>
+            <!-- 🔥 Loading -->
+            <div id="loading" style="display:none; margin-top:10px; font-weight:600; color:#555;">
+                ⏳ Analyzing...
+            </div>
 
-            <!-- Prompt Button -->
-            <button onclick="togglePrompt()" style="margin-top:15px;">
+            <!-- 🔥 Prompt Button -->
+            <button id="promptBtn" onclick="togglePrompt()" style="margin-top:15px;">
                 View Agent Prompt
             </button>
 
@@ -37,7 +44,8 @@
 
             <h2>Analysis Dashboard</h2>
 
-            <div id="result">
+            <!-- 🔥 Result Area -->
+            <div id="result" style="min-height:120px;">
                 <p style="color:gray;">Results will appear here...</p>
             </div>
 
@@ -48,7 +56,9 @@
     <!-- 🔥 Floating Prompt Box -->
     <div id="promptBox" class="popup"></div>
 
+    <!-- Scripts -->
     <script src="script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </body>
 </html>

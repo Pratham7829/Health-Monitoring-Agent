@@ -1,5 +1,5 @@
 async function submitForm() {
-    const btn = document.querySelector(".left-panel button");
+    const btn = document.getElementById("analyzeBtn");
     btn.disabled = true;
 
     document.getElementById("loading").style.display = "block";
@@ -11,7 +11,7 @@ async function submitForm() {
     const heartRate = Number(document.getElementById("heartRate").value);
 
     // Validation
-    if (!patientId || !bp || !sugar || !heartRate) {
+    if (!patientId || isNaN(bp) || isNaN(sugar) || isNaN(heartRate)) {
         document.getElementById("result").innerHTML =
             `<p style="color:red;">Please fill all fields.</p>`;
         btn.disabled = false;
@@ -20,14 +20,16 @@ async function submitForm() {
     }
 
     try {
-        const response = await fetch("https://health-agent-backend-dm8n.onrender.com/analyze", {
+        const response = await fetch("http://localhost:3000/analyze", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({ patientId, bp, sugar, heartRate })
         });
-
+        if (!response.ok) {
+            throw new Error("API Error");
+        }
         const data = await response.json();
 
         // 🔥 GRAPH FIRST (IMPORTANT FIX)
@@ -67,7 +69,7 @@ async function submitForm() {
             <div class="card">
                 <h4>Decision Factors</h4>
                 <ul>
-                    ${data.factors.map(f => `<li>✔ ${f}</li>`).join("")}
+                    ${(data.factors || []).map(f => `<li>✔ ${f}</li>`).join("")}
                 </ul>
             </div>
 
@@ -221,7 +223,7 @@ async function togglePrompt() {
     const box = document.getElementById("promptBox");
 
     if (box.style.display === "none") {
-        const res = await fetch("https://health-agent-backend-dm8n.onrender.com/prompt");
+        const res = await fetch("http://localhost:3000/prompt");
         const text = await res.text();
 
         box.innerText = text;

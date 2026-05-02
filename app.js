@@ -1,15 +1,13 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
 
-// 🔥 use async fs
 const fs = require("fs/promises");
 
-// 🔥 import controller
 const agentController = require("./agent/controller");
-
-// 🔥 import dataset loader
 const { loadDataset } = require("./agent/tools/datasetAnalyzer");
+const connectDB = require("./db");
 
 app.use(cors());
 app.use(express.json());
@@ -20,7 +18,6 @@ app.get("/", (req, res) => {
     res.send("Health Agent Running");
 });
 
-// 🔥 async prompt route
 app.get("/prompt", async (req, res) => {
     try {
         const prompt = await fs.readFile("./prompts/agentPrompt.txt", "utf-8");
@@ -31,7 +28,6 @@ app.get("/prompt", async (req, res) => {
     }
 });
 
-// 🔥 async controller route
 app.post("/analyze", async (req, res) => {
     try {
         const data = req.body;
@@ -49,16 +45,17 @@ app.post("/analyze", async (req, res) => {
 
         res.json(result);
     } catch (err) {
+        console.error("Error in /analyze:", err);
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
 
 // ---------------- SERVER START ----------------
 
-// 🔥 load dataset BEFORE server starts
 async function startServer() {
     try {
-        await loadDataset(); // ✅ important
+        await connectDB();     // 🔥 MongoDB
+        await loadDataset();   // 🔥 dataset
 
         app.listen(3000, () => {
             console.log("🚀 Server running on port 3000");

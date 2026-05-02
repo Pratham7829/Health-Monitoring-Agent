@@ -3,63 +3,39 @@ const riskCalculator = require("./tools/riskCalculator");
 const recommender = require("./tools/recommender");
 const { datasetAnalyzer } = require("./tools/datasetAnalyzer");
 
-// 🔥 use async fs
+// 🔥 MongoDB model
+const Patient = require("../models/Patient");
+
+// 🔥 async fs (only for prompt now)
 const fs = require("fs/promises");
 
-// -------------------- FILE HELPERS --------------------
+// -------------------- PROMPT LOADER --------------------
 
-// async prompt loader
 async function loadPrompt() {
     try {
         return await fs.readFile("./prompts/agentPrompt.txt", "utf-8");
     } catch (err) {
         console.error("Error loading prompt:", err);
-        return ""; // fallback
-    }
-}
-
-// async history loader
-async function loadHistory() {
-    try {
-        const data = await fs.readFile("./data/history.json", "utf-8");
-        return JSON.parse(data);
-    } catch (err) {
-        console.error("Error loading history:", err);
-        return []; // fallback if file missing/corrupt
-    }
-}
-
-// async history saver
-async function saveHistory(history) {
-    try {
-        await fs.writeFile(
-            "./data/history.json",
-            JSON.stringify(history, null, 2)
-        );
-    } catch (err) {
-        console.error("Error saving history:", err);
+        return "";
     }
 }
 
 // -------------------- MAIN CONTROLLER --------------------
 
 async function agentController(data) {
+    console.log("api hit");
 
     let reasoning = [];
 
-    // 🔥 await here
-    let historyData = await loadHistory();
+    // 🔥 find patient in DB
+    let patient = await Patient.findOne({ patientId: data.patientId });
 
-    // find patient
-    let patient = historyData.find(p => p.patientId === data.patientId);
-
-    // if patient not found → create new
+    // create if not exists
     if (!patient) {
-        patient = {
+        patient = new Patient({
             patientId: data.patientId,
             records: []
-        };
-        historyData.push(patient);
+        });
     }
 
     // add new record
@@ -74,18 +50,19 @@ async function agentController(data) {
         patient.records.shift();
     }
 
-    // 🔥 await save
-    await saveHistory(historyData);
+    // 🔥 save to DB
+    await patient.save();
+    console.log("Saved patient:", patient);
 
-    // Step 1: Understand goal
+    // Step 1
     reasoning.push("Goal: Analyze patient health and detect risk");
 
-    // Step 2: Trend analysis
+    // Step 2: Trend
     const trend = trendAnalyzer(patient.records);
     reasoning.push(`Trend Analysis for Patient ${data.patientId}: ${trend}`);
     reasoning.push(`Records used for trend: ${patient.records.length}`);
 
-    // Step 3: Dataset Analysis
+    // Step 3: Dataset
     reasoning.push("Decision: Using dataset analysis tool");
     const datasetResult = datasetAnalyzer(data);
 
@@ -93,14 +70,14 @@ async function agentController(data) {
         `Dataset Insight → High: ${datasetResult.high}, Medium: ${datasetResult.medium}, Low: ${datasetResult.low}`
     );
 
-    // Step 4: Load prompt
+    // Step 4: Prompt
     const prompt = await loadPrompt();
     reasoning.push("Loaded Agent Instructions");
 
     let strictMode = prompt.includes("strict");
     reasoning.push(`Mode: ${strictMode ? "Strict" : "Normal"}`);
 
-    // Step 5: Calculate base risk
+    // Step 5: Base Risk
     let initialRisk;
 
     if (strictMode) {
@@ -133,9 +110,9 @@ async function agentController(data) {
         factors.push("All vitals within safe range");
     }
 
-    // Step 6: Dataset adjustment
-    const highProb = parseFloat(datasetResult.high);
-    const mediumProb = parseFloat(datasetResult.medium);
+    // Step 6: Dataset Adjustment
+    const highProb = datasetResult.high;
+    const mediumProb = datasetResult.medium;
 
     if (highProb === 0 && mediumProb === 0) {
         reasoning.push("No similar dataset records found → relying on rules and trend only");
@@ -151,7 +128,7 @@ async function agentController(data) {
 
     reasoning.push(`Final Risk (after dataset analysis): ${risk}`);
 
-    // Step 7: Confidence calculation
+    // Step 7: Confidence
     let confidence = 0;
 
     if (risk === "high") confidence += datasetResult.high * 60;

@@ -1,12 +1,22 @@
-const fs = require("fs");
+const fs = require("fs/promises");
 
-function loadDataset() {
-    const data = fs.readFileSync("./data/dataset.json", "utf-8");
-    return JSON.parse(data);
+// 🔥 global dataset cache
+let dataset = [];
+
+// 🔥 load once
+async function loadDataset() {
+    try {
+        const data = await fs.readFile("./data/dataset.json", "utf-8");
+        dataset = JSON.parse(data);
+        console.log("✅ Dataset loaded successfully");
+    } catch (err) {
+        console.error("❌ Error loading dataset:", err);
+        dataset = [];
+    }
 }
 
+// 🔥 analyzer (no file read here now)
 function datasetAnalyzer(input) {
-    const dataset = loadDataset();
 
     let similar = [];
 
@@ -33,10 +43,13 @@ function datasetAnalyzer(input) {
     const total = similar.length;
 
     return {
-        high: (count.high / total).toFixed(2),
-        medium: (count.medium / total).toFixed(2),
-        low: (count.low / total).toFixed(2)
+        high: Math.round((count.high / total) * 100) / 100,
+        medium: Math.round((count.medium / total) * 100) / 100,
+        low: Math.round((count.low / total) * 100) / 100
     };
 }
 
-module.exports = datasetAnalyzer;
+module.exports = {
+    datasetAnalyzer,
+    loadDataset
+};

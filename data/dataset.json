@@ -10,6 +10,17 @@
   { "bp": 119, "sugar": 97, "heartRate": 71, "risk": "low" },
   { "bp": 121, "sugar": 103, "heartRate": 74, "risk": "low" },
 
+  { "bp": 114, "sugar": 88, "heartRate": 66, "risk": "low" },
+  { "bp": 116, "sugar": 93, "heartRate": 69, "risk": "low" },
+  { "bp": 124, "sugar": 108, "heartRate": 77, "risk": "low" },
+  { "bp": 113, "sugar": 91, "heartRate": 67, "risk": "low" },
+  { "bp": 126, "sugar": 112, "heartRate": 79, "risk": "low" },
+  { "bp": 118, "sugar": 96, "heartRate": 72, "risk": "low" },
+  { "bp": 120, "sugar": 101, "heartRate": 73, "risk": "low" },
+  { "bp": 111, "sugar": 89, "heartRate": 65, "risk": "low" },
+  { "bp": 122, "sugar": 104, "heartRate": 75, "risk": "low" },
+  { "bp": 119, "sugar": 99, "heartRate": 71, "risk": "low" },
+
   { "bp": 135, "sugar": 150, "heartRate": 88, "risk": "medium" },
   { "bp": 140, "sugar": 160, "heartRate": 92, "risk": "medium" },
   { "bp": 138, "sugar": 155, "heartRate": 90, "risk": "medium" },
@@ -21,6 +32,17 @@
   { "bp": 136, "sugar": 148, "heartRate": 87, "risk": "medium" },
   { "bp": 139, "sugar": 150, "heartRate": 91, "risk": "medium" },
 
+  { "bp": 141, "sugar": 162, "heartRate": 94, "risk": "medium" },
+  { "bp": 133, "sugar": 147, "heartRate": 86, "risk": "medium" },
+  { "bp": 146, "sugar": 170, "heartRate": 97, "risk": "medium" },
+  { "bp": 134, "sugar": 149, "heartRate": 88, "risk": "medium" },
+  { "bp": 143, "sugar": 160, "heartRate": 92, "risk": "medium" },
+  { "bp": 138, "sugar": 154, "heartRate": 90, "risk": "medium" },
+  { "bp": 147, "sugar": 172, "heartRate": 98, "risk": "medium" },
+  { "bp": 136, "sugar": 150, "heartRate": 89, "risk": "medium" },
+  { "bp": 140, "sugar": 158, "heartRate": 91, "risk": "medium" },
+  { "bp": 135, "sugar": 152, "heartRate": 87, "risk": "medium" },
+
   { "bp": 155, "sugar": 190, "heartRate": 105, "risk": "high" },
   { "bp": 160, "sugar": 200, "heartRate": 110, "risk": "high" },
   { "bp": 165, "sugar": 210, "heartRate": 115, "risk": "high" },
@@ -30,5 +52,16 @@
   { "bp": 162, "sugar": 205, "heartRate": 112, "risk": "high" },
   { "bp": 168, "sugar": 215, "heartRate": 116, "risk": "high" },
   { "bp": 152, "sugar": 188, "heartRate": 104, "risk": "high" },
-  { "bp": 159, "sugar": 198, "heartRate": 109, "risk": "high" }
+  { "bp": 159, "sugar": 198, "heartRate": 109, "risk": "high" },
+
+  { "bp": 157, "sugar": 192, "heartRate": 106, "risk": "high" },
+  { "bp": 163, "sugar": 208, "heartRate": 113, "risk": "high" },
+  { "bp": 169, "sugar": 218, "heartRate": 117, "risk": "high" },
+  { "bp": 151, "sugar": 187, "heartRate": 103, "risk": "high" },
+  { "bp": 166, "sugar": 212, "heartRate": 114, "risk": "high" },
+  { "bp": 154, "sugar": 189, "heartRate": 105, "risk": "high" },
+  { "bp": 161, "sugar": 202, "heartRate": 111, "risk": "high" },
+  { "bp": 167, "sugar": 214, "heartRate": 116, "risk": "high" },
+  { "bp": 153, "sugar": 186, "heartRate": 104, "risk": "high" },
+  { "bp": 158, "sugar": 196, "heartRate": 108, "risk": "high" }
 ]

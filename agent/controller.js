@@ -1,28 +1,54 @@
 const trendAnalyzer = require("./tools/trendAnalyzer");
 const riskCalculator = require("./tools/riskCalculator");
 const recommender = require("./tools/recommender");
-const fs = require("fs");
-const datasetAnalyzer = require("./tools/datasetAnalyzer");
+const { datasetAnalyzer } = require("./tools/datasetAnalyzer");
 
-function loadPrompt() {
-    return fs.readFileSync("./prompts/agentPrompt.txt", "utf-8");
+// 🔥 use async fs
+const fs = require("fs/promises");
+
+// -------------------- FILE HELPERS --------------------
+
+// async prompt loader
+async function loadPrompt() {
+    try {
+        return await fs.readFile("./prompts/agentPrompt.txt", "utf-8");
+    } catch (err) {
+        console.error("Error loading prompt:", err);
+        return ""; // fallback
+    }
 }
 
-function loadHistory() {
-    const data = fs.readFileSync("./data/history.json", "utf-8");
-    return JSON.parse(data);
+// async history loader
+async function loadHistory() {
+    try {
+        const data = await fs.readFile("./data/history.json", "utf-8");
+        return JSON.parse(data);
+    } catch (err) {
+        console.error("Error loading history:", err);
+        return []; // fallback if file missing/corrupt
+    }
 }
 
-function saveHistory(history) {
-    fs.writeFileSync("./data/history.json", JSON.stringify(history, null, 2));
+// async history saver
+async function saveHistory(history) {
+    try {
+        await fs.writeFile(
+            "./data/history.json",
+            JSON.stringify(history, null, 2)
+        );
+    } catch (err) {
+        console.error("Error saving history:", err);
+    }
 }
 
-function agentController(data) {
+// -------------------- MAIN CONTROLLER --------------------
+
+async function agentController(data) {
 
     let reasoning = [];
 
-    let historyData = loadHistory();
-    // let history = loadHistory();
+    // 🔥 await here
+    let historyData = await loadHistory();
 
     // find patient
     let patient = historyData.find(p => p.patientId === data.patientId);
@@ -48,18 +74,18 @@ function agentController(data) {
         patient.records.shift();
     }
 
-    // save updated history
-    saveHistory(historyData);
+    // 🔥 await save
+    await saveHistory(historyData);
 
     // Step 1: Understand goal
     reasoning.push("Goal: Analyze patient health and detect risk");
 
-    // // Step 2: Analyze trend( use ONLY this patient’s history)
+    // Step 2: Trend analysis
     const trend = trendAnalyzer(patient.records);
     reasoning.push(`Trend Analysis for Patient ${data.patientId}: ${trend}`);
     reasoning.push(`Records used for trend: ${patient.records.length}`);
 
-    // Step 3: Dataset Analysis (placed correctly)
+    // Step 3: Dataset Analysis
     reasoning.push("Decision: Using dataset analysis tool");
     const datasetResult = datasetAnalyzer(data);
 
@@ -68,7 +94,7 @@ function agentController(data) {
     );
 
     // Step 4: Load prompt
-    const prompt = loadPrompt();
+    const prompt = await loadPrompt();
     reasoning.push("Loaded Agent Instructions");
 
     let strictMode = prompt.includes("strict");
@@ -95,10 +121,8 @@ function agentController(data) {
 
     reasoning.push(`Initial Risk (rules + trend): ${initialRisk}`);
 
-    // final risk starts from initial
     let risk = initialRisk;
-
-        let factors = [];
+    let factors = [];
 
     if (data.bp > 140) factors.push("High Blood Pressure");
     if (data.sugar > 180) factors.push("High Sugar Level");
@@ -109,13 +133,10 @@ function agentController(data) {
         factors.push("All vitals within safe range");
     }
 
-    // Step 6: Adjust using dataset
-
-    // convert to numbers (fix issue)
+    // Step 6: Dataset adjustment
     const highProb = parseFloat(datasetResult.high);
     const mediumProb = parseFloat(datasetResult.medium);
 
-    // adjustment logic
     if (highProb === 0 && mediumProb === 0) {
         reasoning.push("No similar dataset records found → relying on rules and trend only");
     }
@@ -130,24 +151,21 @@ function agentController(data) {
 
     reasoning.push(`Final Risk (after dataset analysis): ${risk}`);
 
+    // Step 7: Confidence calculation
     let confidence = 0;
 
-    // 1) dataset signal (strongest)
     if (risk === "high") confidence += datasetResult.high * 60;
     else if (risk === "medium") confidence += datasetResult.medium * 60;
     else confidence += datasetResult.low * 60;
 
-    // 2) trend signal
     if (trend === "increasing") confidence += 15;
     if (trend === "stable") confidence += 8;
 
-    // 3) history signal (more data → more confidence)
-    confidence += Math.min(historyData.length * 5, 25);
+    confidence += Math.min(patient.records.length * 5, 25);
 
-    // clamp 0–100
     confidence = Math.min(100, Math.round(confidence));
 
-    // Step 7: Recommendation
+    // Step 8: Recommendation
     const recommendation = recommender(risk);
     reasoning.push(`Decision: ${recommendation}`);
 
@@ -158,7 +176,7 @@ function agentController(data) {
         recommendation,
         reasoning,
         datasetResult,
-        patientHistory: patient.records,   // 🔥 ADD THIS
+        patientHistory: patient.records,
         confidence,
         factors
     };

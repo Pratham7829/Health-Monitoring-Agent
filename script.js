@@ -20,7 +20,7 @@ async function submitForm() {
     }
 
     try {
-        const response = await fetch("http://localhost:3000/analyze", {
+        const response = await fetch("https://health-agent-backend-dm8n.onrender.com/analyze", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -223,7 +223,7 @@ async function togglePrompt() {
     const box = document.getElementById("promptBox");
 
     if (box.style.display === "none") {
-        const res = await fetch("http://localhost:3000/prompt");
+        const res = await fetch("https://health-agent-backend-dm8n.onrender.com/prompt");
         const text = await res.text();
 
         box.innerText = text;

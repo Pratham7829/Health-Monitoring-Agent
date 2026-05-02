@@ -38,19 +38,18 @@ Uses a dataset of past patients to: Compare similar cases, Adjust risk intellige
 🧑‍⚕️ 7. Multi-Patient Support
 Each patient has: Unique ID, Separate history, Independent trend tracking
 
-### 🏗️ System Architecture
-             User Input
-                 ↓
-            Agent Controller
-                 ↓
- Trend Analyzer │ Dataset Tool │ Rule Engine 
-                 ↓
-        Risk + Confidence + Factors
-                 ↓
-    Frontend Dashboard (Charts + Cards)
-
 ### ⚙️ Tech Stack
 
-1. Frontend: HTML, CSS, JavaScript, Chart.js (for visualization)
-2. Backend: Node.js, Express.js
-3. Data Handling: JSON (for dataset + history)
+1. Frontend
+HTML – Structure of the web pages
+CSS – Styling and layout design
+JavaScript – Client-side interactivity and logic
+Chart.js – Used for data visualization (graphs, charts, analytics display)
+
+2. Backend
+Node.js – Server-side runtime for handling requests
+Express.js – Framework for building APIs and managing routes
+
+3. Data Handling
+MongoDB Atlas – Cloud-based NoSQL database for storing user and project data
+JSON dataset - We use a JSON dataset containing symptoms and risk. The backend matches user input with this dataset and calculates disease probability.

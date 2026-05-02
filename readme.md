@@ -54,4 +54,4 @@ Express.js – Framework for building APIs and managing routes
 MongoDB Atlas – Cloud-based NoSQL database for storing user and project data
 JSON dataset - We use a JSON dataset containing symptoms and risk. The backend matches user input with this dataset and calculates disease probability.
 
-Updated by Chanchal Mathur
+Updated by Divyanshika Gupta

@@ -1,3 +1,5 @@
+const { plan } = require("../agent/planner");
+
 const trendAnalyzer = require("./tools/trendAnalyzer");
 const riskCalculator = require("./tools/riskCalculator");
 const recommender = require("./tools/recommender");
@@ -54,17 +56,31 @@ async function agentController(data) {
     await patient.save();
     console.log("Saved patient:", patient);
 
+    const steps = plan(data, patient.records);
+    reasoning.push(`Planner decided steps: ${steps.join(" → ")}`);
+
     // Step 1
     reasoning.push("Goal: Analyze patient health and detect risk");
 
     // Step 2: Trend
-    const trend = trendAnalyzer(patient.records);
-    reasoning.push(`Trend Analysis for Patient ${data.patientId}: ${trend}`);
+    let trend = "not_used";
+
+    if (steps.includes("trendAnalyzer")) {
+        trend = trendAnalyzer(patient.records);
+        reasoning.push(`Trend Analysis: ${trend}`);
+    }
     reasoning.push(`Records used for trend: ${patient.records.length}`);
 
     // Step 3: Dataset
-    reasoning.push("Decision: Using dataset analysis tool");
-    const datasetResult = datasetAnalyzer(data);
+    if (steps.includes("datasetAnalyzer")) {
+        reasoning.push("Decision: Using dataset analysis tool");
+    }
+    let datasetResult = { high: 0, medium: 0, low: 1 };
+
+    if (steps.includes("datasetAnalyzer")) {
+        reasoning.push("Planner selected datasetAnalyzer for pattern matching");
+        datasetResult = datasetAnalyzer(data);
+    }
 
     reasoning.push(
         `Dataset Insight → High: ${datasetResult.high}, Medium: ${datasetResult.medium}, Low: ${datasetResult.low}`
@@ -93,7 +109,11 @@ async function agentController(data) {
 
     } else {
         reasoning.push("Normal mode → using standard risk calculator");
-        initialRisk = riskCalculator(data, trend);
+        if (steps.includes("riskCalculator")) {
+            initialRisk = riskCalculator(data, trend);
+        } else {
+            initialRisk = "low";
+        }
     }
 
     reasoning.push(`Initial Risk (rules + trend): ${initialRisk}`);
@@ -143,7 +163,11 @@ async function agentController(data) {
     confidence = Math.min(100, Math.round(confidence));
 
     // Step 8: Recommendation
-    const recommendation = recommender(risk);
+    let recommendation = "No action needed";
+
+    if (steps.includes("recommender")) {
+        recommendation = recommender(risk);
+    }
     reasoning.push(`Decision: ${recommendation}`);
 
     return {
@@ -155,7 +179,11 @@ async function agentController(data) {
         datasetResult,
         patientHistory: patient.records,
         confidence,
-        factors
+        factors,
+        agentFlow: {
+            goal: "Analyze patient health and detect risk",
+            stepsExecuted: steps
+        }
     };
 }
 

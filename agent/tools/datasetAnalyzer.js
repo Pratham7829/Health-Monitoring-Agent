@@ -31,7 +31,11 @@ function datasetAnalyzer(input) {
     });
 
     if (similar.length === 0) {
-        return { high: 0, medium: 0, low: 0 };
+        return {
+            high: 0,
+            medium: 0,
+            low: 1,
+        };
     }
 
     let count = { high: 0, medium: 0, low: 0 };
